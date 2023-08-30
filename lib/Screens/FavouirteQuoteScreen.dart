@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FavouriteQuoteScreen extends StatefulWidget {
-  const FavouriteQuoteScreen({super.key});
+  final Function(Map<String, dynamic>) onDelete;
+  const FavouriteQuoteScreen({required this.onDelete, super.key});
 
   @override
   State<FavouriteQuoteScreen> createState() => _FavouriteQuoteScreenState();
 }
-
 class _FavouriteQuoteScreenState extends State<FavouriteQuoteScreen> {
   List<Map<String, dynamic>> fetchedFavoriteQuotes = [];
   bool isLoading = true;
@@ -17,7 +17,6 @@ class _FavouriteQuoteScreenState extends State<FavouriteQuoteScreen> {
     super.initState();
     fetchFavoriteQuotes();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,7 @@ class _FavouriteQuoteScreenState extends State<FavouriteQuoteScreen> {
       ),
       body: isLoading
           ? Center(
-              child: CircularProgressIndicator(), // Show a loading indicator
+              child: CircularProgressIndicator(),
             )
           : fetchedFavoriteQuotes.isEmpty
               ? Center(
@@ -56,7 +55,7 @@ class _FavouriteQuoteScreenState extends State<FavouriteQuoteScreen> {
                             icon: Icon(Icons.delete),
                             onPressed: () {
                               removeQuoteFromFavorites(
-                                  quote); // Unfavorite the quote
+                                  quote);
                             },
                           ),
                         ),
@@ -91,8 +90,7 @@ class _FavouriteQuoteScreenState extends State<FavouriteQuoteScreen> {
       setState(() {
         fetchedFavoriteQuotes.remove(quote);
       });
-      Navigator.pop(context, quote);
-      // Refresh the list after unfavorite
+      widget.onDelete(quote);
     }
   }
 }

@@ -143,7 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
               final deleted = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (contex) => FavouriteQuoteScreen()));
+                      builder: (contex) => FavouriteQuoteScreen(
+                            onDelete: UpdateFavourite,
+                          )));
               if (deleted != null) {
                 UpdateFavourite(deleted);
               }
@@ -158,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> fetchData() async {
     final Map<String, String> queryParams = {
       'category': 'all',
-      'count': '1', // Fetch 2 quotes
+      'count': '1',
     };
     final uri = Uri.https(
       'famous-quotes4.p.rapidapi.com',
@@ -232,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Removed from favorites")),
             );
-          } // Mark the quote as not favorite
+          } 
           break;
         }
       }
@@ -249,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (snapshot.docs.isNotEmpty) {
       snapshot.docs.first.reference.delete();
       fetchFavoriteQuotes();
-      // Refresh the list after unfavorite
     }
   }
 
